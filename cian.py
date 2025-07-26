@@ -1,4 +1,10 @@
-CIAN_SEARCH_URL = "https://api.cian.ru/search-offers/v2/search-offers-desktop/"
+"""Helper functions for retrieving and processing CIAN offers."""
+
+import os
+
+DEFAULT_CIAN_URL = "https://api.cian.ru/search-offers/v2/search-offers-desktop/"
+
+CIAN_SEARCH_URL = os.environ.get("CIAN_API_URL", DEFAULT_CIAN_URL)
 MOSCOW_REGION_ID = 1
 HEADERS = {
     "User-Agent": "Mozilla/5.0",

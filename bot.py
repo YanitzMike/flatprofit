@@ -1,7 +1,7 @@
 import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-from cian import fetch_offers, extract_prices, compute_yield, MOSCOW_REGION_ID
+from cian import fetch_offers, extract_prices, compute_yield, MOSCOW_LOCATION
 
 TOKEN = os.environ.get("TELEGRAM_TOKEN")
 
@@ -19,14 +19,14 @@ async def recommend(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     BUDGET_RUB = 40_000_000
 
     try:
-        sale_offers_raw = fetch_offers(MOSCOW_REGION_ID, "sale", price_to=BUDGET_RUB)
-        rent_offers_raw = fetch_offers(MOSCOW_REGION_ID, "rent")
+        sale_offers_raw = fetch_offers(MOSCOW_LOCATION, "sale", price_to=BUDGET_RUB)
+        rent_offers_raw = fetch_offers(MOSCOW_LOCATION, "rent")
     except Exception as exc:
         await update.message.reply_text(f"Failed to fetch offers: {exc}")
         return
 
-    sale_offers = extract_prices(sale_offers_raw)
-    rent_offers = extract_prices(rent_offers_raw)
+    sale_offers = extract_prices(sale_offers_raw, "sale")
+    rent_offers = extract_prices(rent_offers_raw, "rent")
 
     if not sale_offers or not rent_offers:
         await update.message.reply_text("No offers found")

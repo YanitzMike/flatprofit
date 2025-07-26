@@ -1,8 +1,9 @@
 # FlatProfit Telegram Bot
 
-This repository contains a simple Telegram bot that searches apartment listings on CIAN,
-compares them with rental prices in the same area and recommends listings where the
-yield is higher than 8%.
+This repository contains a simple Telegram bot that searches apartment listings
+on CIAN using the [cianparser](https://github.com/lenarsaitov/cianparser)
+scraper, compares them with rental prices in the same area and recommends
+listings where the yield is higher than 8%.
 
 ## Running the bot
 
@@ -20,15 +21,6 @@ The bot supports the command `/recommend` that searches Moscow sale offers up to
 40 million rubles and rental offers in the city. It replies with apartments where
 the estimated yield is above 8%.
 
-If the official CIAN API is unavailable, you can point the bot at a third-party
-unofficial API by setting the `CIAN_API_URL` environment variable before
-launching the bot:
-
-```bash
-export CIAN_API_URL=https://example.com/unofficial-cian
-python bot.py
-```
-
-**Note**: The CIAN API is used via simple HTTP requests and may change at any time.
-The scraper implementation in this repository is basic and might require updates if
-the website structure changes.
+The bot relies on `cianparser`, which scrapes the public CIAN website. Be aware
+that the site layout might change at any time, which could require updates to
+the parser.

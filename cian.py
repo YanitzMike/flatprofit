@@ -1,10 +1,11 @@
 CIAN_SEARCH_URL = "https://api.cian.ru/search-offers/v2/search-offers-desktop/"
+MOSCOW_REGION_ID = 1
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
 
 
-def fetch_offers(region_id: int, deal_type: str) -> list:
+def fetch_offers(region_id: int, deal_type: str, price_to: int | None = None) -> list:
     """Fetch offers from CIAN.
 
     Parameters
@@ -13,6 +14,8 @@ def fetch_offers(region_id: int, deal_type: str) -> list:
         Numerical region identifier used by CIAN.
     deal_type : str
         Either ``"sale"`` or ``"rent"``.
+    price_to : int | None, optional
+        Maximum price filter for sale offers.
 
     Returns
     -------
@@ -38,6 +41,11 @@ def fetch_offers(region_id: int, deal_type: str) -> list:
             }
         }
     }
+    if price_to and deal_type == "sale":
+        query["jsonQuery"]["price"] = {
+            "type": "range",
+            "value": {"to": price_to}
+        }
     resp = requests.post(CIAN_SEARCH_URL, json=query, headers=HEADERS, timeout=10)
     resp.raise_for_status()
     data = resp.json()

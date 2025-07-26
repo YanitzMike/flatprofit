@@ -1,7 +1,7 @@
 import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-from cian import fetch_offers, extract_prices, compute_yield
+from cian import fetch_offers, extract_prices, compute_yield, MOSCOW_REGION_ID
 
 TOKEN = os.environ.get("TELEGRAM_TOKEN")
 
@@ -11,24 +11,16 @@ if not TOKEN:
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
-        "Use /recommend <region_id> to receive listings with yield above 8%"
+        "Use /recommend to receive Moscow listings with yield above 8%"
     )
 
 
 async def recommend(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    if not context.args:
-        await update.message.reply_text("Usage: /recommend <region_id>")
-        return
+    BUDGET_RUB = 40_000_000
 
     try:
-        region_id = int(context.args[0])
-    except ValueError:
-        await update.message.reply_text("Region id must be an integer")
-        return
-
-    try:
-        sale_offers_raw = fetch_offers(region_id, "sale")
-        rent_offers_raw = fetch_offers(region_id, "rent")
+        sale_offers_raw = fetch_offers(MOSCOW_REGION_ID, "sale", price_to=BUDGET_RUB)
+        rent_offers_raw = fetch_offers(MOSCOW_REGION_ID, "rent")
     except Exception as exc:
         await update.message.reply_text(f"Failed to fetch offers: {exc}")
         return

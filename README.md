@@ -16,9 +16,9 @@ yield is higher than 8%.
    python bot.py
    ```
 
-The bot supports the command `/recommend <region_id>` that queries CIAN for purchase
-and rent listings in the given region and replies with apartments where the estimated
-yield is above 8%.
+The bot supports the command `/recommend` that searches Moscow sale offers up to
+40 million rubles and rental offers in the city. It replies with apartments where
+the estimated yield is above 8%.
 
 **Note**: The CIAN API is used via simple HTTP requests and may change at any time.
 The scraper implementation in this repository is basic and might require updates if
